@@ -17,13 +17,7 @@ You goal is to:
 - understand the response from the external function and provide a helpful answer
 """
 
-# take environment variables from .env.
-load_dotenv()
-
-# init
-openai.api_key = os.getenv('OPENAI_API_KEY', '')
-
-# define functions
+# functions
 def add_numbers_fn(value1, value2):
     print('add_numbers_fn', value1, value2)
     return value1 + value2
@@ -32,6 +26,23 @@ def multiply_numbers_fn(value1, value2):
     print('multiply_numbers_fn', value1, value2)
     return value1 * value2
 
+# get completion function
+def get_completion(messages, functions):
+    response = openai.ChatCompletion.create(
+        model=COMPLETION_MODEL,
+        messages=messages,
+        functions=functions,
+        temperature=0,
+    )
+    return response
+
+# init
+# take environment variables from .env.
+load_dotenv()
+
+openai.api_key = os.getenv('OPENAI_API_KEY', '')
+
+# variables
 # describe functions
 function_descriptions = [
     {
@@ -72,17 +83,7 @@ function_descriptions = [
     }
 ]
 
-# get completion function
-def get_completion(messages, functions):
-    response = openai.ChatCompletion.create(
-        model=COMPLETION_MODEL,
-        messages=messages,
-        functions=functions,
-        temperature=0,
-    )
-    return response
-
-# variables
+# messages
 messages = [
     {"role": "system", "content": SYSTEM_PROMPT},
 ]
