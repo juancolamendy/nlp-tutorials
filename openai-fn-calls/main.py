@@ -126,10 +126,12 @@ while True:
       #    "finish_reason": "function_call"
       #  }
       #],
+    # message = response["choices"][0]["message"]
+    # if message.get("function_call"):
     if response.choices[0]["finish_reason"] == "function_call":
         fn_name = response.choices[0].message["function_call"].name
         args = response.choices[0].message["function_call"].arguments
-        arguments = json.loads(args)        
+        arguments = json.loads(args)
         result = locals()[fn_name](**arguments)
         print("function call result:", result)
         # the model must understand the result
